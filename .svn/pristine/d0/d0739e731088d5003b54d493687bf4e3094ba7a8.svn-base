@@ -1,0 +1,95 @@
+package club.evolutioniot.ssh.test;
+
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import club.evolutioniot.ssh.system.dao.PlayUserDao;
+import club.evolutioniot.ssh.system.dao.RoleDao;
+import club.evolutioniot.ssh.system.dao.impl.RoleDaoImpl;
+import club.evolutioniot.ssh.system.domain.PlayUser;
+import club.evolutioniot.ssh.system.domain.Remark;
+import club.evolutioniot.ssh.system.domain.UserRole;
+import club.evolutioniot.ssh.system.domain.Vedio;
+import club.evolutioniot.ssh.system.service.PlayUserService;
+import club.evolutioniot.ssh.system.service.RemarkService;
+import club.evolutioniot.ssh.system.service.RoleService;
+import club.evolutioniot.ssh.system.service.VedioService;
+import club.evolutioniot.ssh.system.service.impl.RoleServiceImpl;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath*:spring/beans.xml")
+public class TestSSH {
+	@Autowired
+	RoleService service;
+	@Autowired
+	PlayUserService userService;
+	@Autowired
+	RemarkService remarkService;
+	@Autowired
+	VedioService  vedioService;
+//	@Test//OK
+	public void testAdd(){
+//		UserRole role=new UserRole();
+//		role.setRoleName("黑名单");
+//		service.add(role);
+		PlayUser user=new PlayUser();
+		user.setPlayUserName("马化腾");
+		user.setPlayUserPassword("123");
+		userService.addUser(user);
+	}
+
+	 @Test//OK
+	public void testQuery() {
+		userService.selectAllUser().stream().forEach(System.out::println);
+//		System.out.println("********************");
+//		userService.selectNomalUser().stream().forEach(System.out::println);
+//		System.out.println("********************");
+//		userService.selectBlockUser().stream().forEach(System.out::println);
+
+	}
+
+	// @Test//OK
+	public void testDelete() {
+		PlayUser user = new PlayUser();
+		user.setPlayUserId(1);
+		userService.deleteUser(user);
+	}
+
+//	@Test // OK
+	public void testUpdate() {
+		PlayUser user = this.userService.findUserById(3);
+		System.out.println(user);
+		user.setPlayUserBirthday(new Date());
+		user.setPlayUserEmail("evolution@qq.com");
+		if (user != null) {
+			userService.modifyUser(user);
+		}
+	}
+
+	@Test
+	public void testLogin() {
+		PlayUser user = new PlayUser();
+		user.setPlayUserName("mht");
+		user.setPlayUserPassword("123");
+		this.userService.Login(user,2);
+	}
+	@Test
+	public void testdelete(){
+		PlayUser user = new PlayUser();
+		user.setPlayUserId(1);
+		this.userService.deleteUser(user);
+	}
+	
+	@Test
+	public void getVoid(){
+		Vedio vedio = this.vedioService.findVedioById(17);
+		System.out.println(vedio.getVedioContent());
+	}
+}
+	

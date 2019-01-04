@@ -1,0 +1,21 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Lenovo
+  Date: 2018/10/30
+  Time: 18:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>update</title>
+</head>
+<body>
+<form action="department/departmentAction_update.action" method="post">
+<input type="hidden" name="id" value="${department.id}">
+    部门名称：<input name="name" type="text" value="${department.name}"><br>
+    部门位置：<input name="location" type="text" value="${department.location}"><br>
+    <input type="submit" value="更新"/>
+</form>
+</body>
+</html>

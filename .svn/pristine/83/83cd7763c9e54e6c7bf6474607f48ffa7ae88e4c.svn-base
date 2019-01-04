@@ -1,0 +1,81 @@
+package club.evolutioniot.ssh.common.dao.impl;
+
+import club.evolutioniot.ssh.common.dao.BaseDao;
+import club.evolutioniot.ssh.common.util.GenericUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.HibernateTemplate;
+
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.List;
+
+/**
+ * BaseDaoImpl
+ * 
+ * @author EVolution 2018年11月1日-下午2:05:55
+ * @param <T>
+ */
+public class BaseDaoImpl<T> implements BaseDao<T> {
+	@Autowired
+	private HibernateTemplate hibernateTemplate;
+
+	protected Class<T> entityClass = GenericUtils.getSuperClassGenericActualTypeArguments(this.getClass(), 0);
+
+	@Override
+	public void save(T t) {
+		this.hibernateTemplate.persist(t);
+	}
+
+	@Override
+	public void delete(T t) {
+		this.hibernateTemplate.delete(t);
+	}
+
+	@Override
+	public void update(T t) {// TODO merge update
+		this.hibernateTemplate.merge(t);
+	}
+
+	@Override
+	public T findById(Serializable id) {// TODO get无延迟 用于单元测试
+		return this.hibernateTemplate.get(entityClass, id);// load 需要web环境| get
+															// 无延迟
+	}
+
+	@Override
+	public List<T> findAll() {
+		return (List<T>) this.hibernateTemplate.find("from " + this.entityClass.getSimpleName() + " o ");
+	}
+
+	@Override
+	public <P> List<T> find(String whereHQL, P... params) {
+		if (StringUtils.isBlank(whereHQL))
+			return this.findAll();
+		String hql = " from " + this.entityClass.getSimpleName() + " o " + whereHQL;
+
+		return (List<T>) this.hibernateTemplate.find(hql, params);
+	}
+	
+//TODO 多表查询 
+//	public <P> List<T> findSQL(String SQL, P... params) {
+//		String sql = "";
+//		return (List<T>) this.hibernateTemplate.execute(new HibernateCallback() {
+//			public Object doInHibernate(Session session){
+//				Query query = session.createQuery(sql);
+//				if (params != null && params.length > 0) {
+//					for (int i = 0; i < params.length; i++) {
+//						query.setParameter(i, params[i]);
+//					}
+//				}
+//				return query.list();
+//			}
+//		});
+//	}
+
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<!-- 设置文件上传的大小 视频文件上传最大为100M -->
+	<constant name="struts.multipart.maxSize" value="104857600"></constant>
+	<package name="vedio" extends="base" namespace="/system">
+		<action name="VedioAction_*" class="vedioAction" method="{1}">
+			<!-- 在这儿配置拦截器，只允许视频后缀名的文件才能够上传 -->
+			<interceptor-ref name="defaultStack">
+				<param name="fileUpload.allowedExtensions">avi,rmvb,rm,asf,divx,mpg,mpeg,mpe,wmv,mp4,mkv,vob</param>
+			</interceptor-ref>
+			<result name="addUI">/WEB-INF/pages/submit-post.jsp</result>
+			<result name="list">/WEB-INF/pages/index.jsp</result>
+			<result name="tolist">/WEB-INF/pages/index.jsp</result>
+			<result name="add" type="redirectAction">/system/VedioAction_addUI</result>
+			<result name="vedioOnLine">/WEB-INF/pages/index.jsp</result>
+		</action>
+	</package>
+
+</struts>

@@ -1,0 +1,23 @@
+package club.evolutioniot.ssh.common.util;
+
+/**
+ * 存放预设参数的工具类
+ * @author EVolution
+ *
+ */
+public class ThisStaticCodes {
+
+	/**
+	 * 异常用户
+	 */
+	public static int FAIL_USER = 0;
+	/**
+	 * 正常用户
+	 */
+	public static int SYS_USER = 1;
+	/**
+	 * 系统管理员
+	 */
+	public static int SYS_MANAGER = 2;
+
+}

@@ -1,0 +1,48 @@
+package club.evolutioniot.ssh.system.web.action;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.opensymphony.xwork2.ActionContext;
+
+import club.evolutioniot.ssh.common.util.ThisStaticCodes;
+import club.evolutioniot.ssh.common.web.action.BaseAction;
+import club.evolutioniot.ssh.system.domain.Menu;
+import club.evolutioniot.ssh.system.domain.PlayUser;
+import club.evolutioniot.ssh.system.service.MenuService;
+import club.evolutioniot.ssh.system.service.PlayUserService;
+
+@Controller("backgroundAction")
+@Scope(value="prototype")
+public class BackgroundAction extends BaseAction<PlayUser>{
+	
+	@Autowired
+	private PlayUserService playUserService;
+	@Autowired
+	private MenuService menuService;
+	public String loginUI(){
+		return "loginUI";
+	}
+	public String login(){
+		PlayUser user = this.t;
+		user = this.playUserService.Login(user, ThisStaticCodes.SYS_MANAGER);
+		if (user != null) {
+			// 将完整登陆用户查询出来后，对象存入Session
+			ActionContext.getContext().getSession().put("usersInfo", user);
+			List<Menu> menuList = menuService.findMenu(user.getUserRole());
+			ActionContext.getContext().getSession().put("menus", menuList);
+			return LOGIN;
+		} else
+			return ERROR;
+	}
+	
+	public String userList(){
+		
+		return "userList";
+	}
+	
+	
+}

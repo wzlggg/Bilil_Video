@@ -1,0 +1,73 @@
+package club.evolutioniot.ssh.system.web.action;
+
+import java.io.File;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
+
+import com.opensymphony.xwork2.ActionContext;
+
+import club.evolutioniot.ssh.common.web.action.BaseAction;
+import club.evolutioniot.ssh.system.domain.PlayUser;
+import club.evolutioniot.ssh.system.domain.Remark;
+import club.evolutioniot.ssh.system.domain.Vedio;
+import club.evolutioniot.ssh.system.service.MenuService;
+import club.evolutioniot.ssh.system.service.PlayUserService;
+import club.evolutioniot.ssh.system.service.RemarkService;
+
+@Controller("remarkAction")
+@Scope(value="prototype")
+public class RemarkAction extends BaseAction<Remark> {
+	@Autowired
+	private MenuService menuService;
+	@Autowired
+	private RemarkService remarkService;
+	private RemarkAction remarkAction;
+	
+	//定义评论
+	private List<Remark> remarkList;
+	
+	@Autowired
+	private PlayUserService playUserService;
+	private PlayUserAction playUserAction;
+	
+	public void setRemarkAction(RemarkAction remarkAction) {
+		this.remarkAction = remarkAction;
+	}
+	
+	//增加评论
+	public String addRemark(){
+		Remark remark=this.t;
+
+		remark.setPlayUser((PlayUser) ActionContext.getContext().getSession().get("userInfo"));
+		remark.setVedio((Vedio) ActionContext.getContext().getSession().get("vedio"));
+		
+		this.remarkService.addRemark(remark);
+		return "addRemark_success";
+	}
+	
+	public String deleteRemark(){
+		Remark remark=this.t;
+		this.remarkService.deleteRemark(remark);
+		return "deleteRemark_success";
+	}
+	 
+	public String findRemark(){
+		
+		return "";
+	}
+	/*public  String  findAllRemark(){
+		Remark remark=this.t;
+		//查询  组装所有
+		if (remark!=null) {
+			
+				ActionContext.getContext().getSession().put("remarkInfo", remark);
+				return SUCCESS;
+			}else 
+				return ERROR;
+		}*/
+	
+
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<package name="remark" extends="base" namespace="/system">
+		<!--class值交给Spring管理可以不为全路径，但必须和Spring Bean中的id值一致 -->
+		<action name="RemarkAction_*" class="remarkAction" method="{1}">
+		<result name="addRemark_success">/WEB-INF/pages/single-vedio-info.jsp</result>
+		<result name="deleteRemark_success">/WEB-INF/pages/single-vedio-info.jsp</result>
+		<result name="SUCCESS"></result>
+		</action>
+		
+	</package>
+	
+</struts>

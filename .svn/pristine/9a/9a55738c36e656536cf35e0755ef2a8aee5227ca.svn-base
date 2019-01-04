@@ -1,0 +1,78 @@
+package club.evolutioniot.ssh.system.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import club.evolutioniot.ssh.common.web.action.BaseAction;
+import club.evolutioniot.ssh.system.dao.VedioDao;
+import club.evolutioniot.ssh.system.domain.Vedio;
+import club.evolutioniot.ssh.system.service.VedioService;
+
+@Service("vedioService")
+@Transactional
+public class VedioServiceImpl implements VedioService {
+	@Autowired
+	private VedioDao vedioDao;
+
+	@Override
+	public void addVedio(Vedio vedio) {
+		if (vedio == null)
+			throw new IllegalArgumentException("");
+		this.vedioDao.save(vedio);
+
+	}
+
+	@Override
+	public void deleteVedio(Vedio vedio) {
+		if (vedio == null)
+			throw new IllegalArgumentException("");
+		Vedio ved = this.vedioDao.findById(vedio.getVedioId());
+		ved.setVedioState(0);
+		ved.setRemark(null);
+		this.vedioDao.update(ved);
+	}
+
+	@Override
+	public List<Vedio> selectAllVedio() {
+		String wherehql = " where o.vedioState = ? ";
+		return this.vedioDao.find(wherehql, 1);
+	}
+
+	@Override
+	public List<Vedio> selectBlockVedio() {
+		String wherehql = " where o.vedioState = ? ";
+		return this.vedioDao.find(wherehql, 0);
+	}
+
+	@Override
+	public List<Vedio> selectVedioByName(String name) {
+		String whereHQL = " where o.vedioName = ? and o.vedioState = ? ";
+		return this.vedioDao.find(whereHQL, name, 1);
+	}
+
+	public List<Vedio> selectVedioByUserId(Integer id) {
+		if (id == null || id <= 0)
+			throw new IllegalArgumentException("");
+		String whereHQL = " where o.playUser.playUserId = ? and o.vedioState != ? ";
+		return this.vedioDao.find(whereHQL, id, 0);
+
+	}
+
+	@Override
+	public Vedio findVedioById(Integer id) {
+		if (id == null || id <= 0)
+			throw new IllegalArgumentException("");
+		String whereHQL = " where o.vedioState = ? and o.vedioId = ? ";
+		Vedio vedio = null;
+		try {
+			vedio = this.vedioDao.find(whereHQL, 1, id).get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vedio;
+	}
+}

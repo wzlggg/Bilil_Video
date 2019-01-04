@@ -1,0 +1,45 @@
+<%@include file="../../common/taglib.jsp" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>employee</title>
+</head>
+<body>
+<table border="1" cellpadding="0" cellspacing="0">
+    <thead>
+    <tr>
+        <%--        private Integer id;
+                private String name;
+                private String password;
+                private Float salary;
+                private Date birthday;
+
+                private Department department;--%>
+        <th>员工编号</th>
+        <th>员工名称</th>
+        <th>员工密码</th>
+        <th>员工薪资</th>
+        <th>员工生日</th>
+        <th>员工部门</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <c:forEach items="${userList}" var="user">
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.password}</td>
+            <td>${user.salary}</td>
+            <td>${user.birthday}</td>
+            <td>${user.department.id}</td>
+        </tr>
+    </c:forEach>
+
+    </tbody>
+
+
+</table>
+</body>
+</html>

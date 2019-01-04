@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!--注解方式 开启包扫描 -->
+	<context:component-scan base-package="club.evolutioniot.ssh" />
+	<!--打开静态文件注解 -->
+	<mvc:default-servlet-handler />
+	<!-- 加载静态文件 - 无效-->
+<!-- <mvc:annotation-driven /> 9
+ 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
+	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
+	<mvc:resources location="/WEB-INF/css/" mapping="/css/**" />
+	<mvc:resources location="=/WEB-INF/fonts/" mapping="/fonts/**" /> -->
+	<!--Druid 数据库连接 -->
+	<bean id="propertyPlaceholderConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<array>
+				<value>classpath*:druid.properties</value>
+			</array>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+		<property name="initialSize" value="${initialSize}" />
+		<property name="maxActive" value="${maxActive}" />
+		<property name="maxWait" value="${maxWait}" />
+	</bean>
+
+	<!--Spring与Hibernate的集成 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!--数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置映射的路径 -->
+		<!-- <property name="mappingResources"> <array> <value>club/evolutioniot/ssh/system/domain/UserRole.hbm.xml</value> 
+			<value>club/evolutioniot/ssh/system/domain/PlayUser.hbm.xml</value> <value>club/evolutioniot/ssh/system/domain/Vedio.hbm.xml</value> 
+			<value>club/evolutioniot/ssh/system/domain/VedioType.hbm.xml</value> <value>club/evolutioniot/ssh/system/domain/Remark.hbm.xml</value> 
+			<value>club/evolutioniot/ssh/system/domain/Menu.hbm.xml</value> </array> 
+			</property> -->
+		<!-- 映射的路径下所有文件 -->
+		<property name="mappingDirectoryLocations"
+			value="classpath:club/evolutioniot/ssh/system/domain/"></property>
+
+		<!--其他配置 hibernate配置底层是property注入 -->
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<!--还可加入二级缓存等配置 -->
+			</props>
+		</property>
+	</bean>
+
+	<!--事务管理器 使用hibernate的管理器 注入SessionFactory -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!--事务注解 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<!--声明式事务 -->
+	<tx:advice transaction-manager="transactionManager" id="txAdvice">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<!--除了以上方法都用 NOT_SUPPORTED -->
+			<tx:method name="*" propagation="NOT_SUPPORTED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="allMethod"
+			expression="execution(* club.evolutioniot.ssh.system.service.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="allMethod" />
+	</aop:config>
+	<!--HibernateTemplate的注入 -->
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>

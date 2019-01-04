@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!--在pojo包下 -->
+<hibernate-mapping package="club.evolutioniot.ssh.system.domain">
+
+	<class name="VedioType" table="ssh_vedioType">
+
+		<!--主键映射，属性名为id，列名也为id -->
+		<id name="vedioTypeId" column="vedioTypeId">
+			<!--根据底层数据库主键自动增长 -->
+			<generator class="native" />
+		</id>
+
+		<!--非主键映射，属性和列名一一对应 -->
+		<property name="vedioTypeName" column="vedioTypeName" length="30" not-null="true" />
+		<property name="vedioTypeDescribe" column="vedioTypeDescribe" />
+		
+		<set name="vedios" inverse="true" cascade="save-update" >
+			<key column="vedioTypeId"></key>
+			<one-to-many class="Vedio" />
+		</set>
+		
+	</class>
+</hibernate-mapping>

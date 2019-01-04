@@ -1,0 +1,51 @@
+package club.evolutioniot.ssh.system.service;
+
+import java.util.List;
+
+import club.evolutioniot.ssh.system.domain.Vedio;
+
+public interface VedioService {
+	/**
+	 * 添加视频
+	 * 
+	 * @param vedio
+	 */
+	public void addVedio(Vedio vedio);
+
+	/**
+	 * 删除视频
+	 */
+	public void delete(Vedio vedio);
+
+	/**
+	 * 查询所有正常视频
+	 * 
+	 * @return 视频列表
+	 */
+	public List<Vedio> selectAllVedio();
+
+	/**
+	 * 查询所有异常视频
+	 * 
+	 * @return true|视频存在 false|视频不存在
+	 */
+	public List<Vedio> selectBlockVedio();
+
+	/**
+	 * 通过Id找视频
+	 */
+	public Vedio findVedioById(Integer id);
+	/**
+	 * 通过名字查询视频
+	 * 
+	 * @return True| 有重複名字 <br>
+	 *         false|無重複名字
+	 * @param name
+	 */
+	public List<Vedio> selectVedioByName(String name);
+	/**
+	 * 通过用户Id查询视频
+	 */
+	public List<Vedio> selectVedioByUserId(Integer id);
+
+}

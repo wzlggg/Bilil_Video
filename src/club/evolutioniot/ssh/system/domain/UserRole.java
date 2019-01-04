@@ -1,0 +1,68 @@
+package club.evolutioniot.ssh.system.domain;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * 与PlayUser 为多对一关系
+ * 
+ * @author EVolution 2018年11月1日-下午10:35:09
+ */
+public class UserRole implements Serializable{
+	private Integer roleId;
+	private String roleName;
+	// 多对一
+	private Set<PlayUser> users = new HashSet<>();
+	// 多对多
+	private Set<Menu> menus = new HashSet<>();
+
+	
+	
+	public UserRole() {
+		super();
+	}
+
+	public UserRole(Integer roleId) {
+		super();
+		this.roleId = roleId;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public Set<PlayUser> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Set<PlayUser> users) {
+		this.users = users;
+	}
+
+	public Set<Menu> getMenus() {
+		return menus;
+	}
+
+	public void setMenus(Set<Menu> menus) {
+		this.menus = menus;
+	}
+
+	@Override
+	public String toString() {
+		return "UserRole [roleId=" + roleId + ", roleName=" + roleName + ", users=" + users + "]";
+	}
+
+}

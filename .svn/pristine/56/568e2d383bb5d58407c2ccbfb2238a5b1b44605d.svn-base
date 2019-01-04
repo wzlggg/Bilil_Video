@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+
+	<package name="playUser" extends="base" namespace="/system">
+		<!--class值交给Spring管理可以不为全路径，但必须和Spring Bean中的id值一致 -->
+		<action name="PlayUserAction_*" class="playUserAction"
+			method="{1}">
+			<result name="loginUI">/WEB-INF/pages/login.jsp</result>
+			<result name="login">/WEB-INF/pages/index.jsp</result>
+			<result name="error">/WEB-INF/pages/login.jsp</result>
+			<result name="registerUI">/WEB-INF/pages/login-register.jsp</result>
+			<result name="register_success" type="redirectAction">/system/PlayUserAction_loginUI
+			</result>
+			<result name="register_fail">/WEB-INF/pages/login-register.jsp
+			</result>
+			<result name="indexUI">/WEB-INF/pages/index.jsp</result>
+
+			<!-- 用户添加头像操作 -->
+			<result name="headUI">/WEB-INF/pages/profile-message.jsp</result>
+			<result name="addHead" type="redirectAction">/system/PlayUserAction_headUI</result>
+			<result name="userInfo">/WEB-INF/pages/profile-message.jsp</result>
+			<result name="userEdite">/WEB-INF/pages/profile-message.jsp</result>
+			<result name="vedioUI">/WEB-INF/pages/profile-vedio.jsp</result>
+
+		</action>
+		<!-- 菜单控制 Action -->
+		<action name="MenuAction" class="menuAction">
+			<result type="json">
+				<param name="root">menuList</param>
+			</result>
+
+		</action>
+
+<!-- 后台管理 Action -->
+		<action name="BackgroundAction_*" class="backgroundAction"
+			method="{1}">
+			<result name="loginUI">/WEB-INF/pages/system/login.jsp</result>
+			<result name="login">/WEB-INF/pages/system/index.jsp</result>
+		</action>
+
+	</package>
+	
+</struts>
