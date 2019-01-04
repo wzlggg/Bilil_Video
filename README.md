@@ -1,4 +1,4 @@
-# Bilil_vedio
+# Bilil_video
 数据库建表基本信息
 1 用戶基本信息
 	建立用户数据库（playUser）
